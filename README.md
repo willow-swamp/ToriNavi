@@ -54,3 +54,6 @@
   使用予定Gem: [Devise](https://github.com/heartcombo/devise)
 * タグやキーワードによる高度な検索機能  
   使用予定Gem: [Ransack](https://github.com/activerecord-hackery/ransack)
+
+## ER図
+![ToriNavi](https://github.com/willow-swamp/ToriNavi/assets/73233305/aa04876a-3bab-4a2c-8986-40830556a460)
