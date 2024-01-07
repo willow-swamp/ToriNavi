@@ -30,3 +30,27 @@
 * 投稿お気に入り登録
 * 投稿へのコメント機能
 * タグやキーワードによる高度な検索機能
+### 機能の実装方針予定
+* Ruby: 3.3.0
+* Rails: 7.1.2
+* CSSフレームワーク: Tailwind CSS, daisyUI
+
+■ 開発環境: 
+
+* Docker
+  
+■ インフラ:
+ 
+* Webアプリケーションサーバ: Fly.io
+* データベースサーバ: PostgreSQL（Fly Postgres）
+
+■ APIなど:
+
+* 焼き鳥屋検索機能（現在地からの検索）  
+  使用予定API: [ホットペッパーAPI](https://webservice.recruit.co.jp/doc/hotpepper/reference.html)
+* マップ表示機能（検索結果の焼き鳥屋のピン表示）  
+  使用予定API: [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/overview)
+* ユーザー認証機能（会員登録機能、ログイン機能）  
+  使用予定Gem: [Devise](https://github.com/heartcombo/devise)
+* タグやキーワードによる高度な検索機能  
+  使用予定Gem: [Ransack](https://github.com/activerecord-hackery/ransack)
