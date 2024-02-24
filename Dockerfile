@@ -5,7 +5,7 @@ ARG RUBY_VERSION=ruby:3.2.2
 # 例: ARG NODE_VERSION=19
 ARG NODE_VERSION=19
 
-FROM $RUBY_VERSION
+FROM --platform=linux/amd64 $RUBY_VERSION
 ARG RUBY_VERSION
 ARG NODE_VERSION
 ENV LANG C.UTF-8
@@ -14,7 +14,21 @@ RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
 && wget --quiet -O - /tmp/pubkey.gpg https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
 && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
 && apt-get update -qq \
-&& apt-get install -y build-essential libpq-dev nodejs yarn vim
+&& apt-get install -y build-essential libpq-dev nodejs yarn vim cron
+
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+&& echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
+&& apt-get update && apt-get install -y google-chrome-stable
+
+RUN CHROME_VERSION="121.0.6167.85" \
+&& echo "Chrome_Version: ${CHROME_VERSION}" \
+&& curl -sS -o /root/chromedriver_linux64.zip https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$CHROME_VERSION/linux64/chromedriver-linux64.zip \
+&& unzip ~/chromedriver_linux64.zip -d ~/ \
+&& rm ~/chromedriver_linux64.zip \
+&& chown root:root ~/chromedriver-linux64/chromedriver \
+&& chmod 755 ~/chromedriver-linux64/chromedriver \
+&& mv ~/chromedriver-linux64/chromedriver /usr/bin/chromedriver
+
 RUN mkdir /app
 WORKDIR /app
 RUN gem install bundler

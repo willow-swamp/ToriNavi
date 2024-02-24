@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:latest
-    platform: linux/amd64
+    platform: linux/arm64/v8
     environment:
       TZ: Asia/Tokyo
       POSTGRES_PASSWORD: password
@@ -11,6 +11,7 @@ services:
       - 5432:5432
   web:
     build: .
+    platform: linux/amd64
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     tty: true
     stdin_open: true
@@ -18,12 +19,19 @@ services:
       - .:/app
       - bundle_data:/usr/local/bundle:cached
       - node_modules:/app/node_modules
+      - .:/usr/src/app
     environment:
       TZ: Asia/Tokyo
     ports:
       - "3000:3000"
     depends_on:
       - db
+      - chrome
+  chrome:
+    image: selenium/standalone-chrome-debug
+    shm_size: 2g
+    ports:
+      - "4444:4444"
 volumes:
   postgres_data:
   bundle_data:
