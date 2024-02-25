@@ -1,0 +1,21 @@
+ja:
+  defaults:
+    login: 'ログイン'
+    register: '登録'
+    logout: 'ログアウト'
+    profile: 'プロフィール'
+    my_page: 'マイページ'
+    setting: '設定'
+    site: 'とりナビ〜ToriNavi〜'
+    home: 'ホーム'
+    search: '焼き鳥屋検索'
+    community: 'コミュニティ'
+    about: 'とりナビについて'
+    contact: 'お問い合わせ'
+    terms_of_service: '利用規約'
+    privacy_policy: 'プライバシーポリシー'
+  top:
+  users:
+    new:
+      title: 'ユーザー登録'
+      to_login_page: 'ログインページへ'
