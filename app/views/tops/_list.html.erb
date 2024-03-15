@@ -1,0 +1,20 @@
+<table class="access-log-table table w-full">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Rating</th>
+      <th>Vicinity</th>
+      <th>Opening Hours</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% google_places.each do |place| %>
+      <tr>
+        <td><%= place.name %></td>
+        <td><%= place.rating %></td>
+        <td><%= place.vicinity %></td>
+        <td><%= place.opening_hours %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

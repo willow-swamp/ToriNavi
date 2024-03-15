@@ -1,3 +1,5 @@
 class TopsController < ApplicationController
-  def index; end
+  def index
+    @google_places = GooglePlaces.all
+  end
 end
