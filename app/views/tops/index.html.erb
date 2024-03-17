@@ -1,4 +1,3 @@
 <% set_meta_tags title: "" %>
-<%= render "tops/map" %>
-<%= render "tops/map_sample" %>
+<%= render partial: "tops/map_sample", locals: { google_places: @google_places.to_json.html_safe } %>
 <%= render partial: "tops/list", locals: { google_places: @google_places } %>
