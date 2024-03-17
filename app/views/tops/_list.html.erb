@@ -1,6 +1,7 @@
 <table class="access-log-table table w-full">
   <thead>
     <tr>
+      <th>No.</th>
       <th>Name</th>
       <th>Rating</th>
       <th>Vicinity</th>
@@ -8,8 +9,9 @@
     </tr>
   </thead>
   <tbody>
-    <% google_places.each do |place| %>
+    <% google_places.each.with_index(1) do |place, i| %>
       <tr>
+        <td><%= i %></td>
         <td><%= place.name %></td>
         <td><%= place.rating %></td>
         <td><%= place.vicinity %></td>

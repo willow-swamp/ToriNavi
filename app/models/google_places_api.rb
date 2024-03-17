@@ -12,7 +12,7 @@ class GooglePlacesApi
       json = Net::HTTP.get(uri)
       data_list = JSON.parse(json, symbolize_names: true)
       data_list[:results].map do |data|
-        GooglePlaces.new(
+        GooglePlace.new(
           latitude: data.dig(:geometry, :location, :lat),
           longitude: data.dig(:geometry, :location, :lng),
           name: data[:name],

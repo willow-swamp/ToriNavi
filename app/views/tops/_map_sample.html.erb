@@ -1,23 +1,49 @@
-<div id="map" class="h-full"></div>
-<script
-src="https://maps.googleapis.com/maps/api/js?key=<%= Rails.application.credentials.google_map[:api_key] %>&callback=initMap&v=weekly"
-  defer
-  >
+<div id="map" class="h-96 w-full"></div>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= Rails.application.credentials.google_map[:api_key] %>&v=beta&libraries=marker&callback=initMap"></script>
+<script>
 
-function initMap() {
-  const myLatLng = { lat: -25.363, lng: 131.044 };
-  const map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 4,
-    center: myLatLng,
-  });
+  let map;
+  let google_places = <%= google_places %>
 
-  new google.maps.Marker({
-    position: myLatLng,
-    map,
-    title: "Hello World!",
-  });
-}
+  function infoWnd(info) {
+    return new google.maps.InfoWindow({
+      content: info.attributes.name,
+      ariaLabel: info.attributes.name,
+    })
+  }
 
-window.initMap = initMap;
+  function initMap() {
+    map = new google.maps.Map(document.getElementById("map"), {
+      center: new google.maps.LatLng(36.64311, 138.18873),
+      zoom: 16,
+      mapId: '91eecefca61a0211'
+    });
+
+    for (let i = 0; i < google_places.length; i++) {
+      const index = String(i + 1)
+      const place = google_places[i]
+      const placeLatLng = { lat: place.attributes.latitude, lng: place.attributes.longitude }
+      const infowindow = infoWnd(place)
+      const pinView = new google.maps.marker.PinView({
+        background: "#FBBC04",
+        glyph: index,
+      });
+      
+      const marker = new google.maps.marker.AdvancedMarkerView({
+        map,
+        position: placeLatLng,
+        content: pinView.element,
+        title: place.attributes.name,
+      });
+
+      marker.addListener("click", () => {
+        infowindow.open({
+          anchor: marker,
+          map,
+        })
+      });
+    }
+  }
+
+  window.initMap = initMap;
 </script>
-

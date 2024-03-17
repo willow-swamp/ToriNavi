@@ -1,4 +1,4 @@
-class GooglePlaces
+class GooglePlace
   include ActiveModel::Model
   include ActiveModel::Attributes
 
