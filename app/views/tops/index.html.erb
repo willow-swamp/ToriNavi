@@ -1,3 +1,8 @@
+<% content_for :js do %>
+  <%= javascript_import_module_tag "tops/map" %>
+<% end %>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= Rails.application.credentials.google_map[:api_key] %>&v=beta&libraries=marker&callback=initMap"></script>
+
 <% set_meta_tags title: "" %>
-<%= render partial: "tops/map_sample", locals: { google_places: @google_places.to_json.html_safe } %>
-<%= render partial: "tops/list", locals: { google_places: @google_places } %>
+<%= render partial: "tops/map" %>
+<%= render partial: "tops/list" %>

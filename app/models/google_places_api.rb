@@ -4,8 +4,13 @@ class GooglePlacesApi
   require 'json'
 
   class << self
-    def search_shops
-      params = { keyword: '焼き鳥', location: '36.64311,138.18873', radius: '500', language: 'ja' }
+    def search_shops(lat, lng)
+      params = {
+        keyword: '焼き鳥',
+        location: "#{lat},#{lng}",
+        radius: '500',
+        language: 'ja'
+      }
       query = URI.encode_www_form(params)
       api_key = Rails.application.credentials.google_map[:api_key]
       uri = URI.parse("https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=#{api_key}&#{query}")

@@ -3,4 +3,5 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "tops#index"
+  post 'tops/search', to: 'tops#search'
 end
