@@ -11,8 +11,8 @@ class GooglePlace
   attribute :vicinity, :string
 
   class << self
-    def all
-      GooglePlacesApi.search_shops
+    def search(lat, lng)
+      GooglePlacesApi.search_shops(lat, lng)
     end
   end
 end
