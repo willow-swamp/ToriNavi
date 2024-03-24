@@ -1,7 +1,7 @@
 <% content_for :js do %>
   <%= javascript_import_module_tag "tops/map" %>
 <% end %>
-<script src="https://maps.googleapis.com/maps/api/js?key=<%= Rails.application.credentials.google_map[:api_key] %>&v=beta&libraries=marker&callback=initMap"></script>
+<script src="<%= @uri %>"></script>
 
 <% set_meta_tags title: "" %>
 <%= render partial: "tops/map" %>

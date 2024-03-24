@@ -2,8 +2,8 @@ let map;
 
 function infoWnd(info){
   return new google.maps.InfoWindow({
-    content: info.attributes.name,
-    ariaLabel: info.attributes.name,
+    content: info.name,
+    ariaLabel: info.name,
   })
 }
 
@@ -28,7 +28,7 @@ function getCurrentLocation() {
     } else {
       // ブラウザがGeolocationをサポートしていない場合
       alert("このブラウザは位置情報をサポートしていません。デフォルトの位置を使用します。");
-      resolve({ lat: 36.64311, lng: 138.18873 }); // デフォルトの位置
+      resolve({ lat: 35.681236, lng: 139.767125 }); // デフォルトの位置
     }
   });
 }
@@ -63,19 +63,28 @@ function postLocation(pos) {
 async function updatePlaceList(places) {
   // 一覧表示エリアの選択（ここでは仮に 'place-list' という ID を持つ tbody 要素とします）
   const listElement = document.querySelector('#place-list');
+  var photoOptions = {
+    maxWidth: 400,
+    maxHeight: 400
+  };
   if (!listElement) return; // エレメントが見つからなければ処理を終了
 
   // 取得した施設データでHTMLを生成
   let html = '';
   places.forEach((place, index) => {
     html += `
-      <tr>
-        <td>${index + 1}</td>
-        <td>${place.attributes.name}</td>
-        <td>${parseFloat(place.attributes.rating)}</td>
-        <td>${place.attributes.vicinity}</td>
-        <td>${place.attributes.opening_hours ? 'Open' : 'Closed'}</td>
-      </tr>
+      <div class="card lg:card-side bg-base-100 shadow-xl my-4" id="shop-list-${index + 1}">
+        <figure class="lg:w-1/3 lg:h-80 h-48"><img src="${place.photos[0].getUrl(photoOptions)}" alt="Album"/></figure>
+        <div class="card-body lg:w-2/3">
+          <h2 class="card-title">${place.name}</h2>
+          <p>${place.vicinity}</p>
+          <p>${parseFloat(place.rating)}</p>
+          <p>${place.opening_hours ? 'Open' : 'Closed'}</p>
+          <div class="card-actions justify-end">
+            <button class="btn btn-primary">Listen</button>
+          </div>
+        </div>
+      </div>
     `;
   });
 
@@ -83,21 +92,44 @@ async function updatePlaceList(places) {
   listElement.innerHTML = html;
 }
 
+async function getPlaces(pos) {
+  var request = {
+    location: pos, // 直接 pos オブジェクトを使用
+    radius: '500',
+    keyword: '焼き鳥',
+    rankBy: google.maps.places.RankBy.PROMINENCE
+  };
+
+  // Promiseを使って非同期処理を行い、検索結果を返す
+  return new Promise((resolve, reject) => {
+    var service = new google.maps.places.PlacesService(map);
+    service.nearbySearch(request, (results, status) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        resolve(results);
+      } else {
+        reject('周辺のお店の検索に失敗しました');
+      }
+    });
+  });
+}
+
 async function initMap() {
   const pos = await getCurrentLocation();
-  const places = await postLocation(pos);
   map = new google.maps.Map(document.getElementById("map"), {
     center: pos,
     zoom: 16,
     mapId: '<%= Rails.application.credentials.google_map[:mapId] %>',
   });
+  const places = await getPlaces(pos);
+  console.log(places);
 
   pinLocation(pos);
     
   for (let i = 0; i < places.length; i++) {
     const index = String(i + 1)
     const place = places[i]
-    const placeLatLng = { lat: place.attributes.latitude, lng: place.attributes.longitude }
+    const placeLatLng = place.geometry.location;
+    console.log(placeLatLng);
     const infowindow = infoWnd(place)
     const pinView = new google.maps.marker.PinView({
       background: "#FBBC04",
@@ -108,7 +140,7 @@ async function initMap() {
       map,
       position: placeLatLng,
       content: pinView.element,
-      title: place.attributes.name,
+      title: place.name,
     });
 
     marker.addListener("click", () => {
